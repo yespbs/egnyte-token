@@ -38,8 +38,14 @@ class Egnyte{
 		// log context
 		$context = ['context'=>'Egnyte::'.__FUNCTION__];
 
+		// type
+		$this->type = $type;
+
 		// set config
 		$this->setConfig( $config );
+
+		// base uri
+		$this->base_uri = sprintf('https://%s.egnyte.com/', $this->config['domain']);
 
 		// oauth
 		$this->getOauthToken();
@@ -48,16 +54,13 @@ class Egnyte{
 	/**
 	 * set client
 	 */ 
-	public function setClient()
+	private function setClient()
 	{
 		// log context
 		$context = ['context'=>'Egnyte::'.__FUNCTION__];
 
-		// base uri
-		$base_uri = sprintf('https://%s.egnyte.com/', $this->config['domain']);
-		
 		// http client
-		$this->client = new \GuzzleHttp\Client(['base_uri' => $base_uri]);
+		$this->client = new \GuzzleHttp\Client(['base_uri' => $this->base_uri]);
 
 		// self to chain
 		return $this;
@@ -66,7 +69,7 @@ class Egnyte{
 	/**
 	 * get client
 	 */ 
-	public function getClient()
+	private function getClient()
 	{
 
 		if( ! $this->client )
@@ -102,7 +105,7 @@ class Egnyte{
 	/**
 	 * set debug
 	 */ 
-	public function getDebug()
+	private function getDebug()
 	{
 		return $this->debug;
 	}
@@ -118,11 +121,29 @@ class Egnyte{
 	/**
 	 * @todo
 	 */ 
-	public function getOauthToken(){
+	private function getOauthToken(){
 
 		if( isset($this->config['oauth_token']) && ! empty($this->config['oauth_token']) ) 
 			return;
 
+		if( 'internal' == $this->type ){
+			$this->oAuthInternal();
+		}else{
+			$this->oAuthPublic();
+		}
+
+		if( isset($this->config['oauth_token']) ){
+			$this->dump( 'oauth_token: '.$this->config['oauth_token'] );
+		}
+	}
+
+	/**
+	 * @todo
+	 * 
+	 * 
+	 */ 
+	private function oAuthInternal(){
+		
 		$headers = ['Content-Type'=>'application/x-www-form-urlencoded'];
 		
 		$query = [
@@ -137,7 +158,7 @@ class Egnyte{
 
 		$response = $this->makeRequest('POST', $query, $headers);
 
-		pr($response);
+		$this->dump($response);
 
 		if( isset($response['access_token']) && ! empty($response['access_token']) ){
 
@@ -145,13 +166,35 @@ class Egnyte{
 			
 		}
 
-		echo 'done: '.$this->config['oauth_token'];
 	}
 
 	/**
 	 * @todo
 	 * 
-	 * @deprecated
+	 * 
+	 */ 
+	private function oAuthPublic(){
+		$query = [
+			'client_id'=>$this->config['client_id'],
+			'redirect_uri'=>$_SERVER['PHP_SELF'],
+			'scope' => implode(' ', ['Egnyte.filesystem','Egnyte.link','Egnyte.user']),
+			'state'=>md5(time()),
+			'response_type'=>'code',
+		];
+
+		$this->resource = 'puboauth/token';
+
+		$url = $this->base_uri.$this->resource.'?'.http_build_query($query);
+
+		header('Location:'. $url);
+
+		exit;
+	}
+	
+	/**
+	 * @todo
+	 * 
+	 * 
 	 */ 
 	private function hasResponse( $response, $status = 'Success' )
 	{
