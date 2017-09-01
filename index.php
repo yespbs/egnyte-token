@@ -1,12 +1,16 @@
 <?php
 // one only
 require 'vendor/autoload.php';
-//header('Content-Type: text/html; charset=utf-8');
 
-// private xurp7z556ajxzmmahgpbrjyw
-// public 8fjuhqvuqyhevrrr676755v6
+try{
+	$dotenv = new Dotenv\Dotenv(__DIR__);
+	$dotenv->load();
+}catch( Exception $e ){
 
+	print $e->getMessage();
 
+	exit;
+}
 
 try{
 	$type = 'internal';
@@ -14,15 +18,24 @@ try{
 		$type = $_GET['type'];
 	}
 
+	// private
 	if( 'internal' == $type ){
-		$config = ['domain'=>'egnyte','client_id'=>'xurp7z556ajxzmmahgpbrjyw','username'=>'yespbs','password'=>'IuIyI78a@'];
+		$config = [
+			'domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_PRIVATE_CLIENT_ID'),
+			'username'=>getenv('EGNYTE_USERNAME'),'password'=>getenv('EGNYTE_PASSWORD')
+		];
 	}else{
-		$config = ['domain'=>'egnyte','client_id'=>'8fjuhqvuqyhevrrr676755v6'];
+	// public	
+		$config = ['domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_PUBLIC_CLIENT_ID')];
 	}
+
+	//print_r($config); 
+
+	//exit;
 
 	$egnyte = new Egnyte\Egnyte($type, $config);
 
-	$egnyte->test();
+	//$egnyte->test();
 }catch( Exception $e ){
 
 	print $e->getMessage();
