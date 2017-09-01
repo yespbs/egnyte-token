@@ -174,13 +174,18 @@ class Egnyte{
 	 * 
 	 */ 
 	private function oAuthPublic(){
+
+		$this->dump($_SERVER);
+		
 		$query = [
 			'client_id'=>$this->config['client_id'],
-			'redirect_uri'=>$_SERVER['PHP_SELF'],
+			'redirect_uri'=>$_SERVER['REDIRCT_URI'],
 			'scope' => implode(' ', ['Egnyte.filesystem','Egnyte.link','Egnyte.user']),
 			'state'=>md5(time()),
 			'response_type'=>'code',
 		];
+
+		$this->dump($query); die;
 
 		$this->resource = 'puboauth/token';
 
@@ -190,7 +195,7 @@ class Egnyte{
 
 		exit;
 	}
-	
+
 	/**
 	 * @todo
 	 * 
