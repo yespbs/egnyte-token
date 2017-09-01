@@ -199,7 +199,7 @@ class Egnyte{
 			}
 
 			// debug mode
-			// $options['debug'] = true;
+			$options['debug'] = $this->getDebug();
 
 			// call
 			$response = $this->getClient()->request($method, $this->resource, $options);
@@ -212,12 +212,12 @@ class Egnyte{
 
 			// debug
 			if( $this->getDebug() ){
-				/*// log
-				\Log::debug( 'request: '. $method . ' resource: '. $this->resource, $context );
 				// log
-				\Log::debug( 'options: '. pr($options, true), $context );
+				$this->dump( 'method: '. $method . ' resource: '. $this->resource );
+				// log
+				$this->dump( 'options: '. $this->dump($options, true) );
 				// log	
-				\Log::debug( 'response:'. pr($response, true), $context );*/
+				$this->dump( 'response:'. $this->dump($response, true) );
 
 				// reset since we are using a singleton
 				$this->setDebug( false );
@@ -225,20 +225,33 @@ class Egnyte{
 
 			// return decoded
 			return $response;
-			//return new CFResponse( $response );
 		}catch (RequestException $e) {
-		// log	
-		    /*\Log::error( $e->getMessage(), $context );*/
+		
+		    $s = sprintf('Egnyte request error! resource: %s - [%s] - %s', $this->resource, $e->getMessage(), $e->getCode() );
 
 		    // error
-		    throw new \Exception( $this->resource . ' Egnyte request error! '. $e->getMessage(), $e->getCode() );
+		    throw new \Exception( $s );
 		}catch( Exception $e ){
 
+			$s = sprintf('Egnyte error! resource: %s - [%s] - %s', $this->resource, $e->getMessage(), $e->getCode() );
+
 			// error
-		    throw new \Exception( $this->resource . ' Egnyte error! '. $e->getMessage(), $e->getCode() );
+		    throw new \Exception( $s );
 		}
 
 		return null;
+	}
+
+	public function dump( $d, $return=false ){
+
+		if( is_array($d) || is_object($d) ){
+			$d = sprintf('<pre>%s</pre>', print_r( $d, true) );
+		}
+
+		if( $return )
+			return $d;
+
+		print $d;
 	}
 
 
