@@ -185,7 +185,7 @@ class Egnyte{
 			'response_type'=>'code',
 		];
 
-		$this->dump($query); die;
+		//$this->dump($query); die;
 
 		$this->resource = 'puboauth/token';
 
