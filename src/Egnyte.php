@@ -175,11 +175,11 @@ class Egnyte{
 	 */ 
 	private function oAuthPublic(){
 
-		$this->dump($_SERVER);
-		
+		//$this->dump($_SERVER);
+
 		$query = [
 			'client_id'=>$this->config['client_id'],
-			'redirect_uri'=>$_SERVER['REDIRCT_URI'],
+			'redirect_uri'=>'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'],
 			'scope' => implode(' ', ['Egnyte.filesystem','Egnyte.link','Egnyte.user']),
 			'state'=>md5(time()),
 			'response_type'=>'code',
