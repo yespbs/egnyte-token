@@ -13,13 +13,13 @@ try{
 }
 
 try{
-	$type = 'internal';
-	if( isset($_GET['type']) && in_array($type, ['internal','public']) ){
+	$type = 'private';
+	if( isset($_GET['type']) && in_array($type, ['internal','private','public']) ){
 		$type = $_GET['type'];
 	}
 
 	// private
-	if( 'internal' == $type ){
+	if( in_array($type, ['internal','private']) ){
 		$config = [
 			'domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_PRIVATE_CLIENT_ID'),
 			'username'=>getenv('EGNYTE_USERNAME'),'password'=>getenv('EGNYTE_PASSWORD')
