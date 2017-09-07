@@ -29,9 +29,9 @@ try{
 		$config = ['domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_PUBLIC_CLIENT_ID')];
 	}
 
-	print_r($config); 
+	/*print_r($config); 
 
-	exit;
+	exit;*/
 
 	$egnyte = new Egnyte\Egnyte($type, $config);
 
