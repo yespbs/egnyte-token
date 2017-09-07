@@ -33,6 +33,8 @@ try{
 	// set oauth_token
 	$config['oauth_token'] = getenv('EGNYTE_OAUTH_TOKEN');
 
+	pr($config); exit;
+	
 	// init
 	$egnyte = new Egnyte\Egnyte($type, $config);
 
