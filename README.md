@@ -1,5 +1,4 @@
-# egnyte
-Egnyte API
+# Egnyte API Client
 
 # How to install
 * composer install
