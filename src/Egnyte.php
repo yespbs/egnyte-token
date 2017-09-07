@@ -8,7 +8,7 @@ class Egnyte{
 	/**
 	 * @var array
 	 */
-	private $type = 'public'; // public|internal
+	private $type = 'public'; // public|private
 
 	/**
 	 * @var array
@@ -29,6 +29,11 @@ class Egnyte{
 	 * @var string
 	 */
 	private $resource = '';  
+
+	/**
+	 * @todo
+	 */ 
+	private $oauthScope = ['Egnyte.filesystem','Egnyte.link','Egnyte.user'];
 
 	/**
 	 * @todo
@@ -126,8 +131,8 @@ class Egnyte{
 		if( isset($this->config['oauth_token']) && ! empty($this->config['oauth_token']) ) 
 			return;
 
-		if( 'internal' == $this->type ){
-			$this->oAuthInternal();
+		if( 'private' == $this->type ){
+			$this->oAuthPrivate();
 		}else{
 			$this->oAuthPublic();
 		}
@@ -142,7 +147,7 @@ class Egnyte{
 	 * 
 	 * 
 	 */ 
-	private function oAuthInternal(){
+	private function oAuthPrivate(){
 		
 		$headers = ['Content-Type'=>'application/x-www-form-urlencoded'];
 		
@@ -151,7 +156,7 @@ class Egnyte{
 			'username'=>$this->config['username'],
 			'password'=>$this->config['password'],
 			'grant_type'=>'password',
-			'scope' => implode(' ', ['Egnyte.filesystem','Egnyte.link','Egnyte.user']),
+			'scope' => implode(' ', $this->oauthScope),
 		];
 
 		$this->resource = 'puboauth/token';
@@ -180,7 +185,7 @@ class Egnyte{
 		$query = [
 			'client_id'=>$this->config['client_id'],
 			'redirect_uri'=>'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'],
-			'scope' => implode(' ', ['Egnyte.filesystem','Egnyte.link','Egnyte.user']),
+			'scope' => implode(' ', $this->oauthScope),
 			'state'=>md5(time()),
 			'response_type'=>'code',
 		];
