@@ -13,7 +13,8 @@ try{
 }
 
 try{
-	$type = 'private';
+	// type
+	$type = getenv('EGNYTE_APP_TYPE','private');
 	if( isset($_GET['type']) && in_array($type, ['internal','private','public']) ){
 		$type = $_GET['type'];
 	}
@@ -21,12 +22,12 @@ try{
 	// private
 	if( in_array($type, ['internal','private']) ){
 		$config = [
-			'domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_PRIVATE_CLIENT_ID'),
+			'domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_CLIENT_ID'),
 			'username'=>getenv('EGNYTE_USERNAME'),'password'=>getenv('EGNYTE_PASSWORD')
 		];
 	}else{
 	// public	
-		$config = ['domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_PUBLIC_CLIENT_ID')];
+		$config = ['domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_CLIENT_ID')];
 	}
 
 	// set oauth_token
@@ -40,5 +41,5 @@ try{
 
 }catch( Exception $e ){
 
-	print $e->getMessage();
+	print 'Error: '.$e->getMessage();
 }	
