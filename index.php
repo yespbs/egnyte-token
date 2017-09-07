@@ -29,13 +29,15 @@ try{
 		$config = ['domain'=>getenv('EGNYTE_DOMAIN'),'client_id'=>getenv('EGNYTE_PUBLIC_CLIENT_ID')];
 	}
 
-	/*print_r($config); 
+	// set oauth_token
+	$config['oauth_token'] = getenv('EGNYTE_OAUTH_TOKEN');
 
-	exit;*/
-
+	// init
 	$egnyte = new Egnyte\Egnyte($type, $config);
 
-	//$egnyte->test();
+	// run
+	$egnyte->runTests();
+
 }catch( Exception $e ){
 
 	print $e->getMessage();

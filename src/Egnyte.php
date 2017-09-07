@@ -118,9 +118,9 @@ class Egnyte{
 	/**
 	 * @todo
 	 */ 
-	public function test(){
+	public function runTests(){
 
-		print_r( $this->config );
+		print 'Token:' . $this->config['oauth_token'];
 	}
 
 	/**
