@@ -120,7 +120,9 @@ class Egnyte{
 	 */ 
 	public function runTests(){
 
-		print 'Token:' . $this->config['oauth_token'];
+		print '<h1>Running Tests</h1>';
+
+		print 'Oauth Token:' . $this->config['oauth_token'];
 	}
 
 	/**
