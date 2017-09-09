@@ -1,6 +1,6 @@
 {
-    "name": "yespbs/egnyte",
-    "description": "Egnyte API",
+    "name": "yespbs/egnyte-token",
+    "description": "Egnyte Token",
     "type": "library",
     "require": {
         "php": ">=5.6.4",

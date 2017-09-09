@@ -1,4 +1,4 @@
-# Egnyte API Client
+# Egnyte API Token Genereate
 
 # How to install
 * composer install
